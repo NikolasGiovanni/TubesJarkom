@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package panel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import server.Server;
 
 import javax.swing.JOptionPane;
@@ -13,7 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class Register extends javax.swing.JFrame {
 
-    private Server server = new Server();
+    private final Server server = new Server();
     /**
      * Creates new form Register
      */
@@ -210,14 +212,19 @@ public class Register extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Tolong isi password");
         }else if(textNama.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Tolong isi nama");
-        }else{ //ada isi
-            boolean canRegister = server.addUser(textUser.getText(), textPass.getText(), textNama.getText());
-            if(canRegister){
-                Login loginFrame = new Login();
-                loginFrame.setVisible(true);
-                this.dispose();
-            }else{ //isi sudah terdaftar
-                JOptionPane.showMessageDialog(null, "Username sudah terdaftar","Username sudah terdaftar",JOptionPane.ERROR_MESSAGE);
+        }else{ 
+            try {
+                //ada isi
+                boolean canRegister = server.addUser(textUser.getText(), textPass.getText(), textNama.getText());
+                if(canRegister){
+                    Login loginFrame = new Login();
+                    loginFrame.setVisible(true);
+                    this.dispose();
+                }else{ //isi sudah terdaftar
+                    JOptionPane.showMessageDialog(null, "Username sudah terdaftar","Username sudah terdaftar",JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         

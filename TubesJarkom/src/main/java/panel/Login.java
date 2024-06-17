@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package panel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import server.Server;
 
 import javax.swing.JOptionPane;
@@ -13,7 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class Login extends javax.swing.JFrame {
 
-    private Server server = new Server();
+    private final Server server = new Server();
     /**
      * Creates new form Login
      */
@@ -192,15 +194,20 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Tolong isi username");
         }else if(textPass.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Tolong isi password");
-        }else{ //ada isi
-            boolean canLogin = server.login(textUser.getText(), textPass.getText());
-            
-            if(canLogin){
-                MainMenu menuFrame = new MainMenu();
-                menuFrame.setVisible(true);
-                this.dispose();
-            }else{
-                JOptionPane.showMessageDialog(null, "Username atau Password salah","Username atau Password salah",JOptionPane.ERROR_MESSAGE);
+        }else{ 
+            try {
+                //ada isi
+                boolean canLogin = server.login(textUser.getText(), textPass.getText());
+
+                if(canLogin){
+                    MainMenu menuFrame = new MainMenu();
+                    menuFrame.setVisible(true);
+                    this.dispose();
+                }else{
+                    JOptionPane.showMessageDialog(null, "Username atau Password salah","Username atau Password salah",JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_buttonLoginActionPerformed

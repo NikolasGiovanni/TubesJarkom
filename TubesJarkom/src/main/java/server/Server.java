@@ -7,8 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
+import java.util.concurrent.atomic.AtomicBoolean;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -19,6 +18,8 @@ import java.sql.Statement;
  * @author ASUS
  */
 public class Server {
+    public static final int PORT_NUM = 5000;
+    
     public static void main(String[] args){
         
     }
@@ -51,61 +52,88 @@ public class Server {
         }
     }
 
-    public boolean addUser(String username, String password, String namaTampilan){
-        Connection conn = this.connectdb();
-        
-        boolean canInsert = true;
+    public boolean addUser(String username, String password, String namaTampilan) throws InterruptedException{
+        final Server server = new Server();
+        final Object lock = new Object();
+        final AtomicBoolean canInsert = new AtomicBoolean(false);
 
-        String checkQuery = "SELECT * FROM UserChat WHERE Username = ?";
+        Thread t0 = new Thread() {
+            @Override
+            public void run() {
+                Connection conn = server.connectdb();
 
-        String insertQuery = "INSERT INTO UserChat (Username, Password, NamaTampilan) " +
-                             "VALUES (?, ?, ?)";
+                String checkQuery = "SELECT * FROM UserChat WHERE Username =?";
+                String insertQuery = "INSERT INTO UserChat (Username, Password, NamaTampilan) VALUES (?,?,?)";
 
-        try (PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
-            PreparedStatement insertStmt = conn.prepareStatement(insertQuery)){
-            
-                checkStmt.setString(1, username);
+                synchronized (lock) {
+                    try (PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+                         PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
 
-                try (ResultSet rs = checkStmt.executeQuery()) {
-                    if (rs.next()) {
-                        canInsert = false;
-                        return false;
+                        checkStmt.setString(1, username);
+
+                        try (ResultSet rs = checkStmt.executeQuery()) {
+                            if (rs.next()) {
+                                // User already exists
+                                canInsert.set(false);
+                                return;
+                            }
+                        }
+
+                        // Insert new user
+                        insertStmt.setString(1, username);
+                        insertStmt.setString(2, password);
+                        insertStmt.setString(3, namaTampilan);
+
+                        insertStmt.executeUpdate();
+                        canInsert.set(true);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        canInsert.set(false);
                     }
-                }   
-
-                if(canInsert){
-                    insertStmt.setString(1, username);
-                    insertStmt.setString(2, password);
-                    insertStmt.setString(3, namaTampilan);
-
-                    insertStmt.executeUpdate();
-                    return true;
                 }
-                return false;
+            }
+        };
+        t0.start();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        // Wait for the thread to finish
+        t0.join();
+
+        return canInsert.get();
     }
 
-    public boolean login(String username, String password){
-        Connection conn = this.connectdb();
+    public boolean login(String username, String password) throws InterruptedException {
+        final Server server = new Server();
+        final AtomicBoolean isValid = new AtomicBoolean(false);
 
-        try {
-            Statement stmt = conn.createStatement();
-            String query = "SELECT Username, Password FROM UserChat WHERE Username = '"+username+"' AND Password COLLATE Latin1_General_CS_AS = '"+password+"'";
+        Thread t0 = new Thread() {
+            @Override
+            public void run() {
+                Connection conn = server.connectdb();
 
-            ResultSet rs = stmt.executeQuery(query);
+                String query = "SELECT Username, Password FROM UserChat WHERE Username =? AND Password COLLATE Latin1_General_CS_AS =?";
 
-            if(!rs.next()){
-                return false;
-            }else{
-                return true;
+                try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                    stmt.setString(1, username);
+                    stmt.setString(2, password);
+
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        if (rs.next()) {
+                            isValid.set(true);
+                        } else {
+                            isValid.set(false);
+                        }
+                    }
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                    isValid.set(false);
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        };
+        t0.start();
+
+        // Wait for the thread to finish
+        t0.join();
+
+        return isValid.get();
     }
 }
