@@ -28,32 +28,87 @@ public class MainMenu extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         labelMain = new javax.swing.JLabel();
+        buttonMyRoom = new javax.swing.JButton();
+        labelInformation = new javax.swing.JLabel();
+        buttonCreateRoom = new javax.swing.JButton();
+        buttonJoinRoom = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ChatRoom");
-        setPreferredSize(new java.awt.Dimension(800, 500));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 500));
 
-        labelMain.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        labelMain.setText("Main Menu");
+        labelMain.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        labelMain.setText("Menu Utama");
+
+        buttonMyRoom.setBackground(new java.awt.Color(0, 0, 0));
+        buttonMyRoom.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        buttonMyRoom.setForeground(new java.awt.Color(255, 255, 255));
+        buttonMyRoom.setText("My Room");
+        buttonMyRoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonMyRoomActionPerformed(evt);
+            }
+        });
+
+        labelInformation.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        labelInformation.setText("Welcom to ChatRoom, \"Nama Tampilan\"");
+
+        buttonCreateRoom.setBackground(new java.awt.Color(0, 0, 0));
+        buttonCreateRoom.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        buttonCreateRoom.setForeground(new java.awt.Color(255, 255, 255));
+        buttonCreateRoom.setText("Create Room");
+        buttonCreateRoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonCreateRoomActionPerformed(evt);
+            }
+        });
+
+        buttonJoinRoom.setBackground(new java.awt.Color(0, 0, 0));
+        buttonJoinRoom.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        buttonJoinRoom.setForeground(new java.awt.Color(255, 255, 255));
+        buttonJoinRoom.setText("Join Room");
+        buttonJoinRoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonJoinRoomActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(282, 282, 282)
-                .addComponent(labelMain)
-                .addContainerGap(335, Short.MAX_VALUE))
+                .addContainerGap(268, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(labelMain)
+                        .addGap(276, 276, 276))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(labelInformation)
+                        .addGap(242, 242, 242))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(buttonMyRoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(buttonCreateRoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(buttonJoinRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(300, 300, 300))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(174, 174, 174)
+                .addGap(69, 69, 69)
                 .addComponent(labelMain)
-                .addContainerGap(278, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(labelInformation, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(buttonMyRoom)
+                .addGap(18, 18, 18)
+                .addComponent(buttonCreateRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(buttonJoinRoom)
+                .addContainerGap(169, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -74,6 +129,24 @@ public class MainMenu extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void buttonMyRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMyRoomActionPerformed
+        MyRoom myRoomFrame = new MyRoom();
+        myRoomFrame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_buttonMyRoomActionPerformed
+
+    private void buttonCreateRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCreateRoomActionPerformed
+        CreateRoom createRoomFrame = new CreateRoom();
+        createRoomFrame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_buttonCreateRoomActionPerformed
+
+    private void buttonJoinRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonJoinRoomActionPerformed
+        JoinRoom joinRoomFrame = new JoinRoom();
+        joinRoomFrame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_buttonJoinRoomActionPerformed
 
     /**
      * @param args the command line arguments
@@ -111,7 +184,11 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonCreateRoom;
+    private javax.swing.JButton buttonJoinRoom;
+    private javax.swing.JButton buttonMyRoom;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel labelInformation;
     private javax.swing.JLabel labelMain;
     // End of variables declaration//GEN-END:variables
 }
