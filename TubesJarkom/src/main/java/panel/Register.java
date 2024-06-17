@@ -214,7 +214,7 @@ public class Register extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Tolong isi nama");
         }else{ 
             try {
-                //ada isi
+                ////ada isi
                 boolean canRegister = server.addUser(textUser.getText(), textPass.getText(), textNama.getText());
                 if(canRegister){
                     Login loginFrame = new Login();

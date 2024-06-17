@@ -196,7 +196,7 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Tolong isi password");
         }else{ 
             try {
-                //ada isi
+                ////ada isi
                 boolean canLogin = server.login(textUser.getText(), textPass.getText());
 
                 if(canLogin){

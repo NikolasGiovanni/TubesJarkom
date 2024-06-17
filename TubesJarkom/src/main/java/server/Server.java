@@ -56,7 +56,7 @@ public class Server {
         final Server server = new Server();
         final Object lock = new Object();
         final AtomicBoolean canInsert = new AtomicBoolean(false);
-
+        //
         Thread t0 = new Thread() {
             @Override
             public void run() {
